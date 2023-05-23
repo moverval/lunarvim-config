@@ -85,6 +85,21 @@ lvim.builtin.treesitter.auto_install = true
 --   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 -- end
 
+lvim.builtin.project.active = false
+lvim.builtin.nvimtree.setup.update_cwd = false
+
+lvim.lsp.on_attach_callback = function(client, bufnr)
+    require "lsp_signature".on_attach(
+        {
+            bind = true,
+            handler_opts = {
+                border = "rounded"
+            }
+        },
+        bufnr
+    )
+end
+
 -- -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
 -- local formatters = require "lvim.lsp.null-ls.formatters"
 -- formatters.setup {
@@ -118,8 +133,8 @@ lvim.plugins = {
         event = "BufRead",
         config = function()
             require("hop").setup { keys = "asdfjkl;gheimc" }
-            vim.api.nvim_set_keymap("n", "s", ":HopChar2<cr>", { silent = true })
-            vim.api.nvim_set_keymap("n", "S", ":HopChar1<cr>", { silent = true })
+            vim.api.nvim_set_keymap("n", "S", ":HopChar2<cr>", { silent = true })
+            vim.api.nvim_set_keymap("n", "s", ":HopChar1<cr>", { silent = true })
         end,
     },
     {
@@ -138,6 +153,19 @@ lvim.plugins = {
             vim.fn["mkdp#util#install"]()
         end,
     },
+    {
+        "chipsenkbeil/distant.nvim",
+        branch = "v0.2",
+        config = function()
+            require("distant").setup {
+                ['*'] = require("distant.settings").chip_default()
+            }
+        end,
+    },
+    {
+        "ray-x/lsp_signature.nvim",
+        event = "BufRead",
+    }
 }
 
 -- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
